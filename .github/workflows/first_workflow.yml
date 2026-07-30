@@ -14,12 +14,25 @@ jobs:
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
-      
+
+      - name: Decode OIDC token claims (debug)
+        run: |
+          IDTOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
+
+          PAYLOAD=$(echo "$IDTOKEN" | cut -d '.' -f2)
+          MOD=$((${#PAYLOAD} % 4))
+          if [ $MOD -eq 2 ]; then PAYLOAD="${PAYLOAD}=="; fi
+          if [ $MOD -eq 3 ]; then PAYLOAD="${PAYLOAD}="; fi
+
+          echo "CLAIMS"
+          echo "$PAYLOAD" | base64 -d 2>/dev/null | jq '{aud, sub, repository, ref, workflow, actor}'
+
       - name: Authenticate with OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::800168266979:role/data-product-tambote-github-actions-role
           aws-region: us-east-1
-        
+
       - name: Smoke Test
         run: aws sts get-caller-identity
