@@ -29,7 +29,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_internet_gateway" "main" {
-    vpc_id = aws_vpc.main_id
+    vpc_id = aws_vpc.main.id
 
     tags = {
         Name = "${var.project_name}-igw"
@@ -61,8 +61,8 @@ resource "aws_security_group" "private" {
     ingress {
         from_port = 0
         to_port = 65535
-        protocol = "tpc"
-        cidr_blocks = ["10.0.1.0/24]
+        protocol = "tcp"
+        cidr_blocks = ["10.0.1.0/24"]
     }
 
     egress {
@@ -73,6 +73,6 @@ resource "aws_security_group" "private" {
     }
 
     tags = {
-        Name = "${var.project_name}-private-sg
+        Name = "${var.project_name}-private-sg"
     }
 }
