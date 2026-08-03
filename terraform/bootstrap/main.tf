@@ -73,6 +73,7 @@ resource "aws_iam_role" "github_actions_role" {
             Action = "sts:AssumeRoleWithWebIdentity"
             Condition = {
                 StringLike = {
+                    # Esto ignora los IDs numéricos intermedios pero valida que sea estrictamente tu organización y tu repo
                     "token.actions.githubusercontent.com:sub": "repo:eruiseco-data*/aws_data_product*:*"
                 }
                 StringEquals = {
