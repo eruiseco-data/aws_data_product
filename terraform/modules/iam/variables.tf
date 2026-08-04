@@ -3,7 +3,7 @@ variable "project_name" {
     description = "dataproduct"
 }
 
-variable = "github_repo" {
+variable "github_repo" {
     type = string
     description = "GitHub repo (eruiseco-data/aws_data_product/)"
 }

@@ -7,7 +7,7 @@ resource "aws_iam_role" "ecs_task_role" {
             Action = "sts:AssumeRole"
             Effect = "Allow"
             Principal = {
-                Service = "ecs-tasks.amazonaws.com
+                Service = "ecs-tasks.amazonaws.com"
             }
         }
         ]
@@ -73,7 +73,7 @@ resource "aws_iam_role_policy" "databricks_s3_policy" {
             },
             {
                 Action = [
-                    "s3:PutObject"
+                    "s3:PutObject",
                     "s3:DeleteObject"
                 ]
                 Resource = [
@@ -98,7 +98,7 @@ resource "aws_iam_role_policy" "databricks_s3_policy" {
 }
 
 resource "aws_iam_instance_profile" "databricks" {
-    name = "$[var.project_name]-databricks-profile"
+    name = "{var.project_name}-databricks-profile"
     role = aws_iam_role.databricks_role.name
 }
 
